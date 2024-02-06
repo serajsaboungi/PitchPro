@@ -26,7 +26,6 @@ def parse_gpx_data(gpx_file_path):
     return data_points
 
 
-# Example usage
 gpx_file_path = '../sample_data/data1.gpx'
 data_points = parse_gpx_data(gpx_file_path)
 print(data_points)
