@@ -30,11 +30,13 @@ def parse_gpx_data(gpxFile):
     for track in gpx.tracks:
         for segment in track.segments:
             for point in segment.points:
+                heartRate = parseExtensions(point.extensions)
                 data_points.append({
                     'SessionDate': point.time.strftime('%Y-%m-%d'),
                     'Timestamp': point.time.strftime('%H:%M:%S'),
                     'Latitude': point.latitude,
-                    'Longitude': point.longitude
+                    'Longitude': point.longitude,
+                    'Heart Rate': heartRate
                 })
 
     # Parse the exercise info directly using ElementTree to avoid namespace issues
@@ -51,6 +53,13 @@ def parse_gpx_data(gpxFile):
 
     return data_points, average_speed, total_distance
 
+def parseExtensions(extensions):
+    if len(extensions) == 0:
+        return None
+    for node in extensions[0].iter():
+        # If use of gpx trackpoint extensions increases, add here
+        if 'hr' in node.tag:
+            return node.text
 
 gpx_file_path = '../sample_data/data1.gpx'
 dataPoints, averageSpeed, distance = parse_gpx_data(gpx_file_path)
